@@ -1,6 +1,7 @@
 import java.io.File;
 import java.util.Scanner;
 
+
 /**
  * @author Mehrdad Sabetzadeh, University of Ottawa
  */
@@ -44,6 +45,7 @@ public class ParkingLot {
 	 */
 	public ParkingLot(String strFilename) throws Exception {
 
+
 		if (strFilename == null) {
 			System.out.println("File name cannot be null.");
 			return;
@@ -55,8 +57,8 @@ public class ParkingLot {
 		calculateLotDimensions(strFilename);
 
 		// instantiate the lotDesign and occupancy variables!
-		// WRITE YOUR CODE HERE!
-
+		lotDesign = new CarType[numRows][numSpotsPerRow];
+		occupancy = new Car[numRows][numSpotsPerRow];	
 		// populate lotDesign and occupancy; you can do so by
 		// writing your own code or alternatively completing the 
 		// private populateFromFile(...) that I have provided
@@ -122,15 +124,20 @@ public class ParkingLot {
 	}
 
 	private void calculateLotDimensions(String strFilename) throws Exception {
-
+		int i = 0;
+		String str = "";
 		Scanner scanner = new Scanner(new File(strFilename));
 
-		while (scanner.hasNext()) {
-			String str = scanner.nextLine();
-			// WRITE YOUR CODE HERE!
+		while (scanner.hasNext() && !str.equals(SECTIONER)) {
+			
+			str = scanner.nextLine();
+			System.out.println(str);
+			
+			i++;
 		}
-
-		scanner.close();
+		numRows = i;
+		numSpotsPerRow = i;
+		
 	}
 
 	private void populateFromFile(String strFilename) throws Exception {
@@ -138,16 +145,42 @@ public class ParkingLot {
 		Scanner scanner = new Scanner(new File(strFilename));
 
 		// YOU MAY NEED TO DEFINE SOME LOCAL VARIABLES HERE!
-
+		String str = "";
+		String[] listOfTypes;
+		int counter = 0;
+		
 		// while loop for reading the lot design
-		while (scanner.hasNext()) {
-			String str = scanner.nextLine();
-			// WRITE YOUR CODE HERE!
-		}
+		while (scanner.hasNext() && !str.equals(SECTIONER)) {
+			
+
+		
+			for (int row = 0; row < numRows; row++) {
+				str = scanner.nextLine().trim().replace(",","").replace(" ","");
+				
+				listOfTypes = str.split("");
+
+				
+	
+				for(int col = 0; col < str.length(); col++) {
+					System.out.println(col);
+					System.out.println(str);
+
+					lotDesign[row][col] = Util.getCarTypeByLabel(listOfTypes[col]);					
+				}
+			}	
+				
+			
+
+			
+
+
+			
+			}
+		
 
 		// while loop for reading occupancy data
 		while (scanner.hasNext()) {
-			String str = scanner.nextLine();
+			str = scanner.nextLine();
 			// WRITE YOUR CODE HERE!
 		}
 
@@ -210,6 +243,7 @@ public class ParkingLot {
 		String strFilename = scanner.nextLine();
 
 		ParkingLot lot = new ParkingLot(strFilename);
+
 
 		System.out.println("Total number of parkable spots (capacity): " + lot.getTotalCapacity());
 
